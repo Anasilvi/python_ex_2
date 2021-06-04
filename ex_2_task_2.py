@@ -104,14 +104,15 @@ class MyGUI:
         result = is_valid_email_address(self.txtfield.get())
        
         if self.attempts_left > 0:
-            self.attempts_left -= 1
-            self.text2.set("Attempts left: " + str(self.attempts_left))
+            
             if result[0] == 'None':
                 self.lblResult.config(fg='blue')
                 window.update()
                 self.textResult.set("Valid email.")
                 self.text.set("")
             else:
+                self.attempts_left -= 1
+                self.text2.set("Attempts left: " + str(self.attempts_left))
                 self.lblMessage.config(fg = 'red')
                 self.lblResult.config(fg = 'red')
                 window.update()
@@ -127,7 +128,7 @@ class MyGUI:
 window=Tk()
 mywin=MyGUI(window)
 window.title('Validate your email')
-window.geometry("400x260+10+20")
+window.geometry("420x260+10+20")
 window.mainloop()
 
 
