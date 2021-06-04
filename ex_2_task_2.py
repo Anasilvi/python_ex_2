@@ -30,28 +30,67 @@
 
 # import your function from the previous .py file as a module (you can abbreviate it)
 # use ex_2_task_2 here instead once your function works!
-from ex_2_task_1 import is_valid_email_address as is_valid 
+#from ex_2_task_1 import is_valid_email_address as is_valid 
+import re
 from tkinter import *
 gave_up = False
 attempts_left = 3
 
 # your code - start
-def checkEmail(email):
-   print(email)
+
+#Adding the function because I had problems importing as a module
+def is_valid_email_address(s):
+    
+    # your code here
+    errorCodes = ('Seems legit', 'Must have exactly one @!',
+    'pre @ part must contain 3 - 16 alfanum chars', 'pre @ part must only contain alfanum chars',
+    'post @ part must have exactly one dot!', 'part after @ and before . must contain 2 - 8 alfanum chars',
+    'part after @ and before . must only contain alfanum chars', 'past-dot part invalid, must be from: com, edu, org, gov')
+    
+    #Regular expression to evaluate if the string match with the pattern
+    regex = re.compile(r'^(\w){3,16}[@](\w){3,8}[\.][com|org|edu]')
+    if(regex.match(s)):
+        return ('None',errorCodes[0])
+    
+    #Matching the error codes
+    else:
+        if s.count('@') != 1:
+            return(1,errorCodes[1])
+        if  len(s.split('@')[0]) < 3 or len(s.split('@')[0]) > 16:
+            return(2,errorCodes[2])
+        if re.search('[^a-zA-Z\d\s:]',s.split('@')[0]):
+            return(3,errorCodes[3])
+        if s.split('@')[1].count('.') != 1:
+            return(4,errorCodes[4])
+        if  len(s.split('@')[1].split('.')[0]) < 2 or len(s.split('@')[1].split('.')[0]) > 8:
+            return(5,errorCodes[5])
+        if not (re.search('.*[@](\w){3,8}[\.].*', s)):
+            return(6,errorCodes[6])
+        if s.split('.')[1] not in ('com','org','edu','gov'):
+            return(7,errorCodes[7])
+    return ('Invalid','Unknown error')
+
+
+
 
 # simple GUI to validate the email
-window=Tk()
+class MyGUI:
+    def __init__(self, win):
 
+        self.lbl=Label(window, text="Write your email below:", fg='Black', font=("Arial", 12))
+        self.lbl.place(x=60, y=50)
+        self.txtfield=Entry(window, text="", bd=5)
+        self.txtfield.place(x=80, y=100)
+        self.btn=Button(window, text="Validate email", fg='blue')
+        self.btn.place(x=100, y=150)
+        self.btn.bind('<Button-1>', self.checkEmail)
+    def checkEmail(self, event):
+        print(is_valid_email_address(self.txtfield.get()))
+
+window=Tk()
+mywin=MyGUI(window)
 window.title('Validate your email')
 window.geometry("300x200+10+20")
-
-lbl=Label(window, text="Write your email below:", fg='Black', font=("Arial", 12))
-lbl.place(x=60, y=50)
-txtfield=Entry(window, text="", bd=5)
-txtfield.place(x=80, y=100)
-btn=Button(window, text="Validate email", fg='blue')
-btn.place(x=100, y=150)
-btn.bind('<Button-1>', checkEmail('hola'))
 window.mainloop()
 
 
