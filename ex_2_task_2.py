@@ -33,8 +33,7 @@
 #from ex_2_task_1 import is_valid_email_address as is_valid 
 import re
 from tkinter import *
-gave_up = False
-attempts_left = 3
+
 
 # your code - start
 
@@ -78,36 +77,57 @@ def is_valid_email_address(s):
 class MyGUI:
     
     def __init__(self, win):
-
+        self.gave_up = False
+        self.attempts_left = 3
         self.lbl=Label(window, text="Write your email below:", fg='Black', font=("Arial", 12))
-        self.lbl.place(x=60, y=20)
+        self.lbl.place(x=120, y=20)
         self.txtfield=Entry(window, text="", bd=5)
-        self.txtfield.place(x=80, y=70)
+        self.txtfield.place(x=140, y=70)
         self.btn=Button(window, text="Validate email", fg='blue')
-        self.btn.place(x=100, y=110)
+        self.btn.place(x=160, y=110)
         self.btn.bind('<Button-1>', self.checkEmail)
-        self.lblResult=Label(window, text="Result:", fg='Black', font=("Arial", 12))
+        self.textResult = StringVar()
+        self.textResult.set("")
+        self.lblResult=Label(window, textvariable = self.textResult, fg='Black', font=("Arial", 12))
         self.lblResult.place(x=120, y=160)
         self.text = StringVar()
         self.text.set("")
         self.lblMessage=Label(window, textvariable = self.text, fg='Black', font=("Arial", 12))
-        self.lblMessage.place(x=40, y=200)
+        self.lblMessage.place(x=30, y=200)
+        self.text2 = StringVar()
+        self.text2.set("Attempts left: " + str(self.attempts_left))
+        self.lblMessage2=Label(window, textvariable = self.text2, fg='Green', font=("Arial", 10))
+        self.lblMessage2.place(x=275, y=240)
+
+    #Function to check if the email is valid
     def checkEmail(self, event):
         result = is_valid_email_address(self.txtfield.get())
-        if result[0] == 'None':
-            print('blue')
-            self.lblMessage.config(fg='blue')
-            window.update()
+       
+        if self.attempts_left > 0:
+            self.attempts_left -= 1
+            self.text2.set("Attempts left: " + str(self.attempts_left))
+            if result[0] == 'None':
+                self.lblResult.config(fg='blue')
+                window.update()
+                self.textResult.set("Valid email.")
+                self.text.set("")
+            else:
+                self.lblMessage.config(fg = 'red')
+                self.lblResult.config(fg = 'red')
+                window.update()
+                self.textResult.set("Invalid email.")
+                self.text.set(result[1] + "\nPlease write your email again.")
         else:
-            print('red')
-            self.lblMessage.config(fg='red')
+            self.lblMessage.config(fg = 'red')
+            self.lblResult.config(fg = 'red')
             window.update()
-        self.text.set(result[1])
+            self.textResult.set("Number of attempts exhausted!")
+            self.text.set("You have reached the maximum number of attempts." + "\nPlease close the window and try later.")
 
 window=Tk()
 mywin=MyGUI(window)
 window.title('Validate your email')
-window.geometry("300x250+10+20")
+window.geometry("400x260+10+20")
 window.mainloop()
 
 
