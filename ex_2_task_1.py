@@ -44,7 +44,7 @@ def is_valid_email_address(s):
     'part after @ and before . must only contain alfanum chars', 'past-dot part invalid, must be from: com, edu, org, gov')
     
     #Regular expression to evaluate if the string match with the pattern
-    regex = re.compile(r'^(\w){3,16}[@](\w){3,8}[\.][com|org|edu]')
+    regex = re.compile(r'^(\w){3,16}[@](\w){3,8}[\.](\bcom\b|\bedu\b|\borg\b|\bgov\b)')
     if(regex.match(s)):
         return ('None',errorCodes[0])
     

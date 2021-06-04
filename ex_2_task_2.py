@@ -48,7 +48,7 @@ def is_valid_email_address(s):
     'part after @ and before . must only contain alfanum chars', 'past-dot part invalid, must be from: com, edu, org, gov')
     
     #Regular expression to evaluate if the string match with the pattern
-    regex = re.compile(r'^(\w){3,16}[@](\w){3,8}[\.][com|org|edu]')
+    regex = re.compile(r'^(\w){3,16}[@](\w){3,8}[\.](\bcom\b|\bedu\b|\borg\b|\bgov\b)')
     if(regex.match(s)):
         return ('None',errorCodes[0])
     
@@ -74,23 +74,40 @@ def is_valid_email_address(s):
 
 
 # simple GUI to validate the email
+
 class MyGUI:
+    
     def __init__(self, win):
 
         self.lbl=Label(window, text="Write your email below:", fg='Black', font=("Arial", 12))
-        self.lbl.place(x=60, y=50)
+        self.lbl.place(x=60, y=20)
         self.txtfield=Entry(window, text="", bd=5)
-        self.txtfield.place(x=80, y=100)
+        self.txtfield.place(x=80, y=70)
         self.btn=Button(window, text="Validate email", fg='blue')
-        self.btn.place(x=100, y=150)
+        self.btn.place(x=100, y=110)
         self.btn.bind('<Button-1>', self.checkEmail)
+        self.lblResult=Label(window, text="Result:", fg='Black', font=("Arial", 12))
+        self.lblResult.place(x=120, y=160)
+        self.text = StringVar()
+        self.text.set("")
+        self.lblMessage=Label(window, textvariable = self.text, fg='Black', font=("Arial", 12))
+        self.lblMessage.place(x=40, y=200)
     def checkEmail(self, event):
-        print(is_valid_email_address(self.txtfield.get()))
+        result = is_valid_email_address(self.txtfield.get())
+        if result[0] == 'None':
+            print('blue')
+            self.lblMessage.config(fg='blue')
+            window.update()
+        else:
+            print('red')
+            self.lblMessage.config(fg='red')
+            window.update()
+        self.text.set(result[1])
 
 window=Tk()
 mywin=MyGUI(window)
 window.title('Validate your email')
-window.geometry("300x200+10+20")
+window.geometry("300x250+10+20")
 window.mainloop()
 
 
