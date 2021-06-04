@@ -67,7 +67,7 @@ def is_valid_email_address(s):
     return ('Invalid','Unknown error')
 
 
-__name__ = '__main__'
+__name__ = 'not__main__'
     
 
 # This if ensures that the following is NOT run if this file was imported as a module (which we'll do next!)
