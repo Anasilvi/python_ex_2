@@ -47,8 +47,24 @@ def is_valid_email_address(s):
     regex = re.compile(r'^(\w){3,16}[@](\w){3,8}[\.][com|org|edu]')
     if(regex.match(s)):
         return ('None',errorCodes[0])
+    
+    #Matching the error codes
     else:
-        return('Invalid',errorCodes[1])
+        if s.count('@') != 1:
+            return(1,errorCodes[1])
+        if  len(s.split('@')[0]) < 3 or len(s.split('@')[0]) > 16:
+            return(2,errorCodes[2])
+        if re.search('[^a-zA-Z\d\s:]',s.split('@')[0]):
+            return(3,errorCodes[3])
+        if s.split('@')[1].count('.') != 1:
+            return(4,errorCodes[4])
+        if  len(s.split('@')[1].split('.')[0]) < 2 or len(s.split('@')[1].split('.')[0]) > 8:
+            return(5,errorCodes[5])
+        if not (re.search('.*[@](\w){3,8}[\.].*', s)):
+            return(6,errorCodes[6])
+        if s.split('.')[1] not in ('com','org','edu','gov'):
+            return(7,errorCodes[7])
+    return ('Invalid','Unknown error')
 
 
 __name__ = '__main__'
@@ -72,7 +88,7 @@ if __name__ == "__main__":
     # validate each email from the list
     for e in email_list:
         r, s = is_valid_email_address(e) 
-        if r == None:
+        if r == 'None': #Use '' to compare 2 strings
             print(e, s) # OK
         else:
             print(f"{e} - error: {s}, error code: {r}") # Error
