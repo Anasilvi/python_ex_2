@@ -1,3 +1,4 @@
+import re
 # Python refresher exercises 2 - task 1
 
 # Write and test a function is_valid_email_address(s) that evaluates string s as a valid email address 
@@ -37,15 +38,24 @@
 def is_valid_email_address(s):
     
     # your code here
-
+    errorCodes = ('Seems legit', 'Must have exactly one @!',
+    'pre @ part must contain 3 - 16 alfanum chars', 'pre @ part must only contain alfanum chars',
+    'post @ part must have exactly one dot!', 'part after @ and before . must contain 2 - 8 alfanum chars',
+    'part after @ and before . must only contain alfanum chars', 'past-dot part invalid, must be from: com, edu, org, gov')
     
+    #Regular expression to evaluate if the string match with the pattern
+    regex = re.compile(r'^(\w){3,16}[@](\w){3,8}[\.][com|org|edu]')
+    if(regex.match(s)):
+        return ('None',errorCodes[0])
+    else:
+        return('Invalid',errorCodes[1])
 
 
+__name__ = '__main__'
     
 
 # This if ensures that the following is NOT run if this file was imported as a module (which we'll do next!)
 if __name__ == "__main__":
-
     # tests, including edge cases (incomplete? add more!)
     email_list = ["charding@iastate.edu", 
         "chris.edu",
